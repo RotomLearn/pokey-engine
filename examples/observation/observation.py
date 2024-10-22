@@ -1,8 +1,7 @@
-from pokey_engine import State, Move, Pokemon, SideConditions
+from pokey_engine import State, Move, Pokemon, SideConditions, observations
 from utilities import Utilities
 
 if __name__ == "__main__":
-    # state = State()
     state = Utilities().initialize_state("./team1.txt", "./team2.txt")
 
     print(state)
@@ -21,3 +20,5 @@ if __name__ == "__main__":
 
     side_conditions = SideConditions()
     print(side_conditions)
+
+    print(observations(state))

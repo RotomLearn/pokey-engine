@@ -1,6 +1,6 @@
 use poke_engine::{
     instruction::StateInstructions,
-    state::{Side, State, StateTerrain, StateTrickRoom, StateWeather, Terrain, Weather},
+    state::{State, StateTerrain, StateTrickRoom, StateWeather, Terrain, Weather},
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
 

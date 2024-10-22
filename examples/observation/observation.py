@@ -1,4 +1,5 @@
-from pokey_engine import State, Move, Pokemon, SideConditions, observations
+from pokey_engine import State, Move, Pokemon, SideConditions
+from pokey_engine.pokezoo import observations
 from utilities import Utilities
 
 if __name__ == "__main__":

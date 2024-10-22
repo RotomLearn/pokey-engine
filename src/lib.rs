@@ -11,16 +11,35 @@ mod pypokemon;
 mod pyside;
 mod pystate;
 
-/// A Python module implemented in Rust.
+#[allow(clippy::wildcard_imports)]
 #[pymodule]
-fn pokey_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<PyState>()?;
-    m.add_class::<PySide>()?;
-    m.add_class::<PyMove>()?;
-    m.add_class::<PyPokemon>()?;
-    m.add_class::<PySideConditions>()?;
+mod pokey_engine {
+    use super::*;
 
-    m.add_function(wrap_pyfunction!(observations, m)?)?;
+    #[pymodule_init]
+    fn init(m: &Bound<'_, PyModule>) -> PyResult<()> {
+        m.add_class::<PyState>()?;
+        m.add_class::<PySide>()?;
+        m.add_class::<PyMove>()?;
+        m.add_class::<PyPokemon>()?;
+        m.add_class::<PySideConditions>()?;
 
-    Ok(())
+        Ok(())
+    }
+
+    #[pymodule(name = "pokezoo")]
+    mod pypokezoo {
+        use super::*;
+
+        #[pymodule_init]
+        fn init(m: &Bound<'_, PyModule>) -> PyResult<()> {
+            m.add_function(wrap_pyfunction!(observations, m)?)?;
+
+            Python::with_gil(|py| {
+                py.import_bound("sys")?
+                    .getattr("modules")?
+                    .set_item("pokey_engine.pokezoo", m)
+            })
+        }
+    }
 }

@@ -1,0 +1,17 @@
+Rotom-Wash @ Leftovers
+Ability: Levitate
+EVs: 248 HP / 8 SpA / 252 Spe
+Timid Nature
+- Pain Split
+- Substitute
+- Will-O-Wisp
+- Hydro Pump
+
+Heatran @ Leftovers
+Ability: Flash Fire
+EVs: 252 HP / 4 SpA / 252 Spe
+Modest Nature
+- Stealth Rock
+- Fire Blast
+- Earth Power
+- Explosion

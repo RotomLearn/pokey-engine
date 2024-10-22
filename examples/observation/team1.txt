@@ -1,0 +1,17 @@
+Tyranitar @ Lum Berry
+Ability: Sand Stream
+EVs: 252 Atk / 4 SpD / 252 Spe
+Jolly Nature
+- Dragon Dance
+- Stone Edge
+- Earthquake
+- Fire Punch
+
+Latias @ Choice Specs
+Ability: Levitate
+EVs: 252 SpA / 4 SpD / 252 Spe
+Timid Nature
+- Draco Meteor
+- Dragon Pulse
+- Surf
+- Trick

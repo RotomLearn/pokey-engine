@@ -14,6 +14,21 @@ pub struct PyPokemon {
     pub pokemon: Pokemon,
 }
 
+impl PyPokemon {
+    pub fn create_pokemon(&self) -> Pokemon {
+        self.pokemon.clone()
+    }
+
+    pub fn create_fainted() -> Self {
+        Self {
+            pokemon: Pokemon {
+                hp: 0,
+                ..Default::default()
+            },
+        }
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 #[pymethods]
 impl PyPokemon {

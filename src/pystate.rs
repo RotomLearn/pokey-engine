@@ -4,12 +4,15 @@ use poke_engine::{
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
 
+use crate::pyside::PySide;
+
 #[pyclass(name = "State")]
 pub struct PyState {
     pub state: State,
     prev_instructions: Option<Vec<StateInstructions>>,
 }
 
+#[allow(clippy::too_many_arguments, clippy::needless_pass_by_value)]
 #[pymethods]
 impl PyState {
     /// # Errors
@@ -17,6 +20,8 @@ impl PyState {
     /// - Invalid terrain type
     #[new]
     #[pyo3(signature = (
+        side_one=PySide::default(),
+        side_two=PySide::default(),
         weather=None,
         weather_turns_remaining=None,
         terrain=None,
@@ -26,6 +31,8 @@ impl PyState {
         team_preview=None
     ))]
     pub fn new(
+        side_one: PySide,
+        side_two: PySide,
         weather: Option<&str>,
         weather_turns_remaining: Option<i8>,
         terrain: Option<&str>,
@@ -39,8 +46,8 @@ impl PyState {
 
         Ok(Self {
             state: State {
-                side_one: Side::default(),
-                side_two: Side::default(),
+                side_one: side_one.side,
+                side_two: side_two.side,
 
                 // TODO: better error handling
                 weather: StateWeather {

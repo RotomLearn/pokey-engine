@@ -55,3 +55,30 @@ impl PyMove {
         format!("{:#?}", self.r#move)
     }
 }
+
+#[derive(Debug)]
+#[pyclass(name = "MoveChoice")]
+pub enum PyMoveChoice {
+    Move(String),
+    Switch(u8),
+    None(),
+}
+
+#[pymethods]
+impl PyMoveChoice {
+    fn __repr__(&self) -> String {
+        match self {
+            Self::Move(m) => format!("Move {m}"),
+            Self::Switch(s) => format!("Switch {s}"),
+            Self::None() => "None".to_string(),
+        }
+    }
+
+    fn __str__(&self) -> String {
+        match self {
+            Self::Move(m) => m.to_string(),
+            Self::Switch(s) => format!("switch {s}"),
+            Self::None() => "None".to_string(),
+        }
+    }
+}

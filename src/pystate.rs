@@ -1,10 +1,13 @@
 use poke_engine::{
+    generate_instructions::generate_instructions_from_move_pair,
     instruction::StateInstructions,
-    state::{State, StateTerrain, StateTrickRoom, StateWeather, Terrain, Weather},
+    state::{
+        MoveChoice, Side, State, StateTerrain, StateTrickRoom, StateWeather, Terrain, Weather,
+    },
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
 
-use crate::pyside::PySide;
+use crate::{pymove::PyMoveChoice, pyside::PySide};
 
 #[pyclass(name = "State")]
 pub struct PyState {
@@ -82,7 +85,108 @@ impl PyState {
         })
     }
 
+    fn battle_is_over(&self) -> f32 {
+        self.state.battle_is_over()
+    }
+
+    fn get_all_options(&self) -> (Vec<PyMoveChoice>, Vec<PyMoveChoice>) {
+        fn convert_move_choice(choice: MoveChoice, side: &Side) -> PyMoveChoice {
+            match choice {
+                MoveChoice::Move(m) => PyMoveChoice::Move(
+                    side.get_active_immutable().moves[m]
+                        .id
+                        .to_string()
+                        .to_lowercase(),
+                ),
+                MoveChoice::Switch(s) => PyMoveChoice::Switch(s.into()),
+                MoveChoice::None => PyMoveChoice::None(),
+            }
+        }
+
+        let (side1, side2) = self.state.get_all_options();
+
+        (
+            side1
+                .into_iter()
+                .map(|c| convert_move_choice(c, &self.state.side_one))
+                .collect::<Vec<PyMoveChoice>>(),
+            side2
+                .into_iter()
+                .map(|c| convert_move_choice(c, &self.state.side_two))
+                .collect::<Vec<PyMoveChoice>>(),
+        )
+    }
+
+    fn generate_instructions(
+        &mut self,
+        side_one_move: String,
+        side_two_move: String,
+    ) -> PyResult<Vec<PyStateInstructions>> {
+        let Some(s1_move) = self.state.side_one.string_to_movechoice(&side_one_move) else {
+            return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(format!(
+                "Invalid move for s1: {side_one_move}"
+            )));
+        };
+
+        let Some(s2_move) = self.state.side_two.string_to_movechoice(&side_two_move) else {
+            return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(format!(
+                "Invalid move for s2: {side_two_move}"
+            )));
+        };
+
+        let instructions =
+            generate_instructions_from_move_pair(&mut self.state, &s1_move, &s2_move);
+
+        let py_instructions = instructions
+            .iter()
+            .map(PyStateInstructions::from_state_instructions)
+            .collect();
+
+        self.prev_instructions = Some(instructions);
+
+        Ok(py_instructions)
+    }
+
+    fn apply_instructions(&mut self, index: usize) -> PyResult<()> {
+        let Some(ref generated_instructions) = self.prev_instructions else {
+            return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+                "Generate instructions must be called first".to_string(),
+            ));
+        };
+
+        let Some(instructions) = generated_instructions.get(index) else {
+            return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(format!(
+                "Invalid index: {index}"
+            )));
+        };
+
+        self.state
+            .apply_instructions(&instructions.instruction_list);
+
+        Ok(())
+    }
+
     fn __str__(&self) -> String {
         format!("{:#?}", self.state)
+    }
+}
+
+#[derive(Clone)]
+#[pyclass(get_all, set_all)]
+struct PyStateInstructions {
+    pub percentage: f32,
+    pub instruction_list: Vec<String>,
+}
+
+impl PyStateInstructions {
+    fn from_state_instructions(instructions: &StateInstructions) -> Self {
+        Self {
+            percentage: instructions.percentage,
+            instruction_list: instructions
+                .instruction_list
+                .iter()
+                .map(|i| format!("{i:?}"))
+                .collect(),
+        }
     }
 }

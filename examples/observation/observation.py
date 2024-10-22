@@ -23,3 +23,20 @@ if __name__ == "__main__":
     print(side_conditions)
 
     print(observations(state))
+
+    print(state.battle_is_over())
+
+    all_options = state.get_all_options()
+    for side in all_options:
+        print(side)
+
+    instructions = state.generate_instructions(
+        str(all_options[0][0]), str(all_options[1][3])
+    )
+
+    for i in instructions:
+        print(i.percentage)
+        print(i.instruction_list)
+
+    state.apply_instructions(1)
+    print(state)

@@ -105,7 +105,7 @@ impl PyState {
                         .to_string()
                         .to_lowercase(),
                 ),
-                MoveChoice::Switch(s) => PyMoveChoice::Switch(s.into()),
+                MoveChoice::Switch(s) => PyMoveChoice::Switch(side.pokemon[s].id.clone()),
                 MoveChoice::None => PyMoveChoice::None(),
             }
         }

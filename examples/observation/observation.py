@@ -42,3 +42,8 @@ if __name__ == "__main__":
     print(state)
 
     print(state.evaluate())
+
+    state.reverse_last_instructions()
+    print(state)
+
+    print(state.evaluate())

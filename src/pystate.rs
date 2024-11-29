@@ -13,7 +13,12 @@ use crate::{pymove::PyMoveChoice, pyside::PySide};
 #[pyclass(name = "State")]
 pub struct PyState {
     pub state: State,
+
+    // instructions from generate_instructions()
     prev_instructions: Option<Vec<StateInstructions>>,
+
+    // stack of instructions from apply_instructions()
+    instruction_stack: Vec<StateInstructions>,
 }
 
 #[allow(clippy::too_many_arguments, clippy::needless_pass_by_value)]
@@ -83,6 +88,7 @@ impl PyState {
                 team_preview: team_preview.unwrap_or(false),
             },
             prev_instructions: None,
+            instruction_stack: vec![],
         })
     }
 
@@ -161,8 +167,23 @@ impl PyState {
             )));
         };
 
+        self.instruction_stack.push(instructions.clone());
+
         self.state
             .apply_instructions(&instructions.instruction_list);
+
+        Ok(())
+    }
+
+    fn reverse_last_instructions(&mut self) -> PyResult<()> {
+        let Some(instructions) = self.instruction_stack.pop() else {
+            return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+                "No instructions to reverse".to_string(),
+            ));
+        };
+
+        self.state
+            .reverse_instructions(&instructions.instruction_list);
 
         Ok(())
     }

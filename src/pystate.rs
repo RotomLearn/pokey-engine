@@ -1,4 +1,5 @@
 use poke_engine::{
+    evaluate::evaluate,
     generate_instructions::generate_instructions_from_move_pair,
     instruction::StateInstructions,
     state::{
@@ -164,6 +165,10 @@ impl PyState {
             .apply_instructions(&instructions.instruction_list);
 
         Ok(())
+    }
+
+    fn evaluate(&self) -> f32 {
+        evaluate(&self.state)
     }
 
     fn __str__(&self) -> String {

@@ -40,3 +40,5 @@ if __name__ == "__main__":
 
     state.apply_instructions(1)
     print(state)
+
+    print(state.evaluate())

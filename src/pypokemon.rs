@@ -1,6 +1,7 @@
 use poke_engine::{
     abilities::Abilities,
     items::Items,
+    pokemon::PokemonName,
     state::{Pokemon, PokemonMoves, PokemonStatus, PokemonType},
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
@@ -35,7 +36,6 @@ impl PyPokemon {
     #[new]
     #[pyo3(signature = (
         id,
-        pokedex_num=0,
         level=100,
         types=vec!["typeless".to_string(), "typeless".to_string()],
         hp=100,
@@ -51,11 +51,12 @@ impl PyPokemon {
         rest_turns=0,
         sleep_turns=0,
         weight_kg=0.0,
+        terastallized=false,
+        tera_type="normal",
         moves=vec![],
     ))]
     fn new(
         id: String,
-        pokedex_num: i16,
         level: i8,
         mut types: Vec<String>,
         hp: i16,
@@ -71,6 +72,8 @@ impl PyPokemon {
         rest_turns: i8,
         sleep_turns: i8,
         weight_kg: f32,
+        terastallized: bool,
+        tera_type: Option<&str>,
         mut moves: Vec<PyMove>,
     ) -> PyResult<Self> {
         types.extend(std::iter::repeat("typeless".to_string()).take(2 - types.len()));
@@ -78,12 +81,11 @@ impl PyPokemon {
 
         Ok(Self {
             pokemon: Pokemon {
-                id,
-                pokedex_num,
+                id: PokemonName::from_str(id.as_str()).unwrap_or(PokemonName::NONE),
                 level,
                 types: (
-                    PokemonType::deserialize(&types[0]),
-                    PokemonType::deserialize(&types[1]),
+                    PokemonType::from_str(&types[0]).unwrap_or(PokemonType::NORMAL),
+                    PokemonType::from_str(&types[1]).unwrap_or(PokemonType::TYPELESS),
                 ),
                 hp,
                 maxhp,
@@ -106,10 +108,14 @@ impl PyPokemon {
                 special_attack,
                 special_defense,
                 speed,
-                status: PokemonStatus::deserialize(status.unwrap_or("none")),
+                status: PokemonStatus::from_str(status.unwrap_or("none"))
+                    .unwrap_or(PokemonStatus::NONE),
                 rest_turns,
                 sleep_turns,
                 weight_kg,
+                terastallized,
+                tera_type: PokemonType::from_str(tera_type.unwrap_or("normal"))
+                    .unwrap_or(PokemonType::NORMAL),
                 moves: PokemonMoves {
                     m0: moves[0].create_move(),
                     m1: moves[1].create_move(),

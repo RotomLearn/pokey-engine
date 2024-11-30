@@ -148,7 +148,6 @@ class Utilities:
                         id=move,
                         disabled=False,
                         pp=int(self.moves_dex[move]["pp"] * 1.6),
-                        move_num=int(self.moves_dex[move]["num"]),
                     )
                 )
 
@@ -162,7 +161,6 @@ class Utilities:
             )
             poke_dict[mon_name] = Pokemon(
                 id=mon_name,
-                pokedex_num=int(self.pokedex[mon_name]["num"]),
                 level=team_dict[mon_name]["level"],
                 types=team_dict[mon_name]["types"],
                 hp=hp_stat,

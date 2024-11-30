@@ -11,7 +11,6 @@ if __name__ == "__main__":
         id="tackle",
         disabled=False,
         pp=int(32),
-        move_num=int(5),
     )
 
     print(move)

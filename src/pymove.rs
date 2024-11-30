@@ -29,8 +29,8 @@ impl PyMove {
 #[pymethods]
 impl PyMove {
     #[new]
-    #[pyo3(signature = (id, move_num, pp, disabled=None))]
-    fn new(id: &str, move_num: i16, pp: i8, disabled: Option<bool>) -> PyResult<Self> {
+    #[pyo3(signature = (id, pp, disabled=None))]
+    fn new(id: &str, pp: i8, disabled: Option<bool>) -> PyResult<Self> {
         let Ok(choice) = Choices::from_str(id) else {
             return Err(PyValueError::new_err(format!("Invalid move id: {id}",)));
         };
@@ -38,7 +38,6 @@ impl PyMove {
         Ok(Self {
             r#move: Move {
                 id: choice,
-                move_num,
                 disabled: disabled.unwrap_or(false),
                 pp,
                 choice: match MOVES.get(&choice) {
@@ -62,6 +61,7 @@ impl PyMove {
 #[pyclass(name = "MoveChoice")]
 pub enum PyMoveChoice {
     Move(String),
+    MoveTera(String),
     Switch(String),
     None(),
 }
@@ -70,7 +70,8 @@ pub enum PyMoveChoice {
 impl PyMoveChoice {
     fn __repr__(&self) -> String {
         match self {
-            Self::Move(m) => format!("Move {m}"),
+            Self::Move(m) => format!("Move Tera {m}"),
+            Self::MoveTera(m) => format!("Move {m}"),
             Self::Switch(s) => format!("Switch {s}"),
             Self::None() => "None".to_string(),
         }
@@ -79,6 +80,7 @@ impl PyMoveChoice {
     fn __str__(&self) -> String {
         match self {
             Self::Move(m) => m.to_string(),
+            Self::MoveTera(m) => m.to_string(),
             Self::Switch(s) => s.to_string(),
             Self::None() => "None".to_string(),
         }

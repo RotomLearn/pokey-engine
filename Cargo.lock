@@ -222,8 +222,8 @@ checksum = "1261fe7e33c73b354eab43b1273a57c8f967d0391e80353e51f764ac02cf6775"
 
 [[package]]
 name = "poke-engine"
-version = "0.0.11"
-source = "git+https://github.com/RotomLearn/poke-engine?branch=test-bindings#1393ffd2dd056ef135336de960921ef3351f5389"
+version = "0.0.17"
+source = "git+https://github.com/RotomLearn/poke-engine?branch=enum-changes#c5438346ad1eb15b9ea19ab1bd232aef432a37f7"
 dependencies = [
  "clap",
  "lazy_static",

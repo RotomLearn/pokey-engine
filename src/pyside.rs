@@ -114,6 +114,7 @@ impl PySide {
         pokemon=vec![],
         side_conditions=PySideConditions::default(),
         wish=(0, 0),
+        future_sight=(0, 0),
         force_switch=false,
         force_trapped=false,
         slow_uturn_move=false,
@@ -135,6 +136,7 @@ impl PySide {
         mut pokemon: Vec<PyPokemon>,
         side_conditions: PySideConditions,
         wish: (i8, i16),
+        future_sight: (i8, u8),
         force_switch: bool,
         force_trapped: bool,
         slow_uturn_move: bool,
@@ -152,7 +154,9 @@ impl PySide {
     ) -> PyResult<Self> {
         let mut vs_hashset = HashSet::new();
         for vs in volatile_statuses {
-            vs_hashset.insert(PokemonVolatileStatus::deserialize(&vs));
+            vs_hashset.insert(
+                PokemonVolatileStatus::from_str(&vs).unwrap_or(PokemonVolatileStatus::NONE),
+            );
         }
 
         pokemon.extend(std::iter::repeat(PyPokemon::create_fainted()).take(6 - pokemon.len()));
@@ -171,6 +175,7 @@ impl PySide {
                 },
                 side_conditions: side_conditions.side_conditions,
                 wish,
+                future_sight: (future_sight.0, PokemonIndex::from(future_sight.1)),
                 force_switch,
                 force_trapped,
                 slow_uturn_move,

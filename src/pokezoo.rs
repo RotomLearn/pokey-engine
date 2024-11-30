@@ -32,15 +32,16 @@ pub fn observations(py_state: &PyState) -> Vec<Vec<PyObject>> {
                 // 0 for pokemon on this side, 1 for pokemon on other side
                 res[side_num].push((i / 2).to_object(py));
 
-                res[side_num].push(p.pokedex_num.to_object(py));
+                // res[side_num].push(p.pokedex_num.to_object(py));
+                res[side_num].push(u32::from(p.id.clone()).to_object(py));
                 res[side_num].push((f32::from(p.hp) / f32::from(p.maxhp)).to_object(py));
 
-                res[side_num].push(i32::from(p.status == PokemonStatus::Burn).to_object(py));
-                res[side_num].push(i32::from(p.status == PokemonStatus::Sleep).to_object(py));
-                res[side_num].push(i32::from(p.status == PokemonStatus::Freeze).to_object(py));
-                res[side_num].push(i32::from(p.status == PokemonStatus::Paralyze).to_object(py));
-                res[side_num].push(i32::from(p.status == PokemonStatus::Poison).to_object(py));
-                res[side_num].push(i32::from(p.status == PokemonStatus::Toxic).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::BURN).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::SLEEP).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::FREEZE).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::PARALYZE).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::POISON).to_object(py));
+                res[side_num].push(i32::from(p.status == PokemonStatus::TOXIC).to_object(py));
             }
         }
     });

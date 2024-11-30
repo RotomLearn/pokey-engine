@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use poke_engine::{
     evaluate::evaluate,
     generate_instructions::generate_instructions_from_move_pair,
@@ -86,6 +88,8 @@ impl PyState {
                     turns_remaining: trick_room_turns_remaining.unwrap_or(0),
                 },
                 team_preview: team_preview.unwrap_or(false),
+                use_damage_dealt: false,
+                use_last_used_move: false,
             },
             prev_instructions: None,
             instruction_stack: vec![],
@@ -100,12 +104,18 @@ impl PyState {
         fn convert_move_choice(choice: MoveChoice, side: &Side) -> PyMoveChoice {
             match choice {
                 MoveChoice::Move(m) => PyMoveChoice::Move(
-                    side.get_active_immutable().moves[m]
+                    side.get_active_immutable().moves[&m]
                         .id
                         .to_string()
                         .to_lowercase(),
                 ),
-                MoveChoice::Switch(s) => PyMoveChoice::Switch(side.pokemon[s].id.clone()),
+                MoveChoice::MoveTera(m) => PyMoveChoice::MoveTera(
+                    side.get_active_immutable().moves[&m]
+                        .id
+                        .to_string()
+                        .to_lowercase(),
+                ),
+                MoveChoice::Switch(s) => PyMoveChoice::Switch(side.pokemon[s].id.to_string()),
                 MoveChoice::None => PyMoveChoice::None(),
             }
         }

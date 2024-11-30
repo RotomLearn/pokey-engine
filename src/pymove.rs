@@ -70,8 +70,8 @@ pub enum PyMoveChoice {
 impl PyMoveChoice {
     fn __repr__(&self) -> String {
         match self {
-            Self::Move(m) => format!("Move Tera {m}"),
-            Self::MoveTera(m) => format!("Move {m}"),
+            Self::Move(m) => format!("Move {m}"),
+            Self::MoveTera(m) => format!("Move Tera {m}"),
             Self::Switch(s) => format!("Switch {s}"),
             Self::None() => "None".to_string(),
         }
@@ -79,9 +79,7 @@ impl PyMoveChoice {
 
     fn __str__(&self) -> String {
         match self {
-            Self::Move(m) => m.to_string(),
-            Self::MoveTera(m) => m.to_string(),
-            Self::Switch(s) => s.to_string(),
+            Self::Move(x) | Self::MoveTera(x) | Self::Switch(x) => x.to_string(),
             Self::None() => "None".to_string(),
         }
     }

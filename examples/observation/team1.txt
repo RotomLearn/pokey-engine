@@ -1,17 +1,60 @@
-Tyranitar @ Lum Berry
-Ability: Sand Stream
-EVs: 252 Atk / 4 SpD / 252 Spe
-Jolly Nature
-- Dragon Dance
-- Stone Edge
-- Earthquake
-- Fire Punch
+Zapdos @ Leftovers  
+Ability: Pressure  
+Shiny: Yes  
+EVs: 248 HP / 248 Def / 12 SpD  
+Bold Nature  
+IVs: 2 Atk / 30 Def  
+- Discharge  
+- Heat Wave  
+- Hidden Power [Ice]  
+- Roost  
 
-Latias @ Choice Specs
-Ability: Levitate
-EVs: 252 SpA / 4 SpD / 252 Spe
-Timid Nature
-- Draco Meteor
-- Dragon Pulse
-- Surf
-- Trick
+Heatran (M) @ Choice Scarf  
+Ability: Flash Fire  
+Shiny: Yes  
+EVs: 4 Atk / 252 SpA / 252 Spe  
+Naive Nature  
+- Fire Blast  
+- Earth Power  
+- Hidden Power [Ice]  
+- Explosion  
+
+Metagross @ Leftovers  
+Ability: Clear Body  
+EVs: 252 HP / 68 Atk / 20 Def / 168 SpD  
+Adamant Nature  
+- Meteor Mash  
+- Earthquake  
+- Explosion  
+- Protect  
+
+Blissey @ Leftovers  
+Ability: Natural Cure  
+Shiny: Yes  
+EVs: 252 HP / 252 Def / 4 SpD  
+Bold Nature  
+- Stealth Rock  
+- Seismic Toss  
+- Soft-Boiled  
+- Flamethrower  
+
+Starmie @ Leftovers  
+Ability: Natural Cure  
+Shiny: Yes  
+EVs: 248 HP / 44 Def / 216 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Surf  
+- Psychic  
+- Recover  
+- Rapid Spin  
+
+Breloom (M) @ Toxic Orb  
+Ability: Poison Heal  
+Shiny: Yes  
+EVs: 204 HP / 252 Atk / 20 SpD / 32 Spe  
+Adamant Nature  
+- Spore  
+- Superpower  
+- Seed Bomb  
+- Mach Punch  

@@ -5,6 +5,7 @@ from collections import defaultdict
 from pokey_engine import Move, Pokemon, Side, SideConditions, State
 
 
+
 def normalize_name(name):
     return (
         name.replace(" ", "")
@@ -14,6 +15,8 @@ def normalize_name(name):
         .replace("%", "")
         .replace("*", "")
         .replace(":", "")
+        .replace("[","")
+        .replace(']', "")
         .strip()
         .lower()
         .encode("ascii", "ignore")
@@ -143,11 +146,14 @@ class Utilities:
                     raise ValueError("- line found before Pokemon line")
 
                 move = normalize_name(line[2:])
+                dex_move = move
+                if move[:6] == 'hidden':
+                    move += '60'
                 mon["moves"].append(
                     Move(
                         id=move,
                         disabled=False,
-                        pp=int(self.moves_dex[move]["pp"] * 1.6),
+                        pp=int(self.moves_dex[dex_move]["pp"] * 1.6)
                     )
                 )
 
@@ -243,3 +249,4 @@ class Utilities:
         )
 
         return state
+    

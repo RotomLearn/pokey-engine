@@ -89,7 +89,6 @@ impl PySideConditions {
         }
     }
 
-
     fn __str__(&self) -> String {
         format!("{:#?}", self.side_conditions)
     }
@@ -160,11 +159,26 @@ impl PySide {
             );
         }
 
+        fn convert_to_pokemon_index(index: u8) -> PokemonIndex {
+            match index {
+                0 => PokemonIndex::P0,
+                1 => PokemonIndex::P1,
+                2 => PokemonIndex::P2,
+                3 => PokemonIndex::P3,
+                4 => PokemonIndex::P4,
+                5 => PokemonIndex::P5,
+                _ => panic!("Index out of range: {}", index),
+            }
+        }
+
         pokemon.extend(std::iter::repeat(PyPokemon::create_fainted()).take(6 - pokemon.len()));
+        let active_index = convert_to_pokemon_index(active_index);
+
+        let future_sight_1 = convert_to_pokemon_index(future_sight.1);
 
         Ok(Self {
             side: Side {
-                active_index: PokemonIndex::from(active_index),
+                active_index: active_index,
                 baton_passing,
                 pokemon: SidePokemon {
                     p0: pokemon[0].create_pokemon(),
@@ -176,7 +190,7 @@ impl PySide {
                 },
                 side_conditions: side_conditions.side_conditions,
                 wish,
-                future_sight: (future_sight.0, PokemonIndex::from(future_sight.1)),
+                future_sight: (future_sight.0, PokemonIndex::from(future_sight_1)),
                 force_switch,
                 force_trapped,
                 slow_uturn_move,

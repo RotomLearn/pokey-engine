@@ -33,7 +33,7 @@ pub fn observations(py_state: &PyState) -> Vec<Vec<PyObject>> {
                 res[side_num].push((i / 2).to_object(py));
 
                 // res[side_num].push(p.pokedex_num.to_object(py));
-                res[side_num].push(u32::from(p.id.clone()).to_object(py));
+                res[side_num].push(Into::<u16>::into(p.id).clone().to_object(py));
                 res[side_num].push((f32::from(p.hp) / f32::from(p.maxhp)).to_object(py));
 
                 res[side_num].push(i32::from(p.status == PokemonStatus::BURN).to_object(py));

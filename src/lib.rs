@@ -5,6 +5,7 @@ use pypokemon::PyPokemon;
 use pyside::{PySide, PySideConditions};
 use pystate::PyState;
 
+mod mcts_ol;
 mod pokezoo;
 mod pymove;
 mod pypokemon;

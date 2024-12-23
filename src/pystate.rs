@@ -1,5 +1,4 @@
-use std::str::FromStr;
-
+use crate::mcts_ol::perform_mcts_search;
 use poke_engine::{
     evaluate::evaluate,
     generate_instructions::generate_instructions_from_move_pair,
@@ -9,6 +8,8 @@ use poke_engine::{
     },
 };
 use pyo3::{exceptions::PyValueError, prelude::*};
+use std::str::FromStr;
+use std::time::Duration;
 
 use crate::{pymove::PyMoveChoice, pyside::PySide};
 
@@ -152,7 +153,7 @@ impl PyState {
         };
 
         let instructions =
-            generate_instructions_from_move_pair(&mut self.state, &s1_move, &s2_move);
+            generate_instructions_from_move_pair(&mut self.state, &s1_move, &s2_move, true);
 
         let py_instructions = instructions
             .iter()
@@ -204,6 +205,13 @@ impl PyState {
 
     fn __str__(&self) -> String {
         format!("{:#?}", self.state)
+    }
+
+    fn perform_mcts_search(&mut self, time_limit: u64) -> (String, f32, i64) {
+        // Convert time_limit from seconds to Duration if provided
+        let time_limit = Duration::from_millis(time_limit);
+
+        perform_mcts_search(&mut self.state, None, Some(time_limit))
     }
 }
 

@@ -6,6 +6,7 @@ use pyside::{PySide, PySideConditions};
 use pystate::PyState;
 
 mod mcts_ol;
+mod mcts_ol_st;
 mod pokezoo;
 mod pymove;
 mod pypokemon;

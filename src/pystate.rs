@@ -1,4 +1,5 @@
 use crate::mcts_ol::perform_mcts_search;
+use crate::mcts_ol_st::perform_mcts_search_st;
 use poke_engine::{
     evaluate::evaluate,
     generate_instructions::generate_instructions_from_move_pair,
@@ -212,6 +213,21 @@ impl PyState {
         let time_limit = Duration::from_millis(time_limit);
 
         perform_mcts_search(&mut self.state, None, Some(time_limit))
+    }
+
+    fn perform_mcts_search_st(&mut self, time_limit: u64) -> (Vec<(String, f32)>, i64) {
+        // Convert time_limit from seconds to Duration if provided
+        let time_limit = Duration::from_millis(time_limit);
+
+        perform_mcts_search_st(&mut self.state, None, Some(time_limit))
+    }
+
+    fn serialize(&self) -> String {
+        self.state.serialize()
+    }
+
+    fn deserialize(&mut self, serialized: &str) -> () {
+        self.state = State::deserialize(serialized);
     }
 }
 
